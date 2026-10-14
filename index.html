@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What I Learned About Cybersecurity</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #080d18;
+  --panel: #111c30;
+  --cyan: #5ce1e6;
+  --purple: #9a8cff;
+  --text: #f0f6ff;
+  --muted: #a0b0c9;
+  --line: #7890c52c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 10%, #163458 0, transparent 38%),
+    radial-gradient(ellipse at 90% 30%, #28194b 0, transparent 35%),
+    var(--bg);
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background: #5ce1e6;
+  opacity: .045;
+  filter: blur(90px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 6%;
+  border-bottom: 1px solid var(--line);
+  background: #080d18d9;
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 700 18px 'Space Grotesk', sans-serif;
+  letter-spacing: 1px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: #07101c;
+  font-size: 23px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  box-shadow: 0 0 25px #5ce1e655;
+  animation: logoGlow 3s infinite alternate;
+}
+
+.brand span { color: var(--cyan); }
+
+.toplabel {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+main {
+  max-width: 1250px;
+  padding: 30px 6% 65px;
+  margin: auto;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  align-items: center;
+  gap: 25px;
+  padding: 35px 0 65px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  color: var(--cyan);
+  background: #5ce1e60b;
+  border: 1px solid #5ce1e655;
+  border-radius: 30px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  animation: glowBorder 3s infinite;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--cyan);
+  animation: blink 1.5s infinite;
+}
+
+h1 {
+  margin: 23px 0 18px;
+  font: 700 clamp(38px, 5.5vw, 68px)/1.08 'Space Grotesk', sans-serif;
+  letter-spacing: -2px;
+}
+
+h1 span {
+  color: var(--cyan);
+  background: linear-gradient(100deg, var(--cyan), #c3b5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  max-width: 590px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.hero-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+}
+
+.orb {
+  position: relative;
+  width: 185px;
+  height: 185px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #5ce1e677;
+  border-radius: 50%;
+  background: radial-gradient(circle, #5ce1e616, transparent 70%);
+  box-shadow: 0 0 70px #726aff30, inset 0 0 35px #5ce1e622;
+  animation: float 5s ease-in-out infinite;
+}
+
+.orb::before, .orb::after {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border: 1px solid #9a8cff66;
+  border-radius: 50%;
+  transform: rotateX(65deg) rotateZ(-25deg);
+}
+
+.orb::after {
+  inset: -39px;
+  border-color: #5ce1e655;
+  transform: rotateX(65deg) rotateZ(35deg);
+}
+
+.orb-icon {
+  font-size: 65px;
+  filter: drop-shadow(0 0 16px #5ce1e6bb);
+}
+
+.float-tag {
+  position: absolute;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #111e32ef;
+  box-shadow: 0 10px 25px #0005;
+  font-size: 11px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.tag1 { top: 20px; left: 0; }
+.tag2 { top: 75px; right: 0; animation-delay: .8s; }
+.tag3 { bottom: 15px; left: 12%; animation-delay: 1.5s; }
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 23px;
+}
+
+.section-heading h2 {
+  font: 600 26px 'Space Grotesk', sans-serif;
+  margin-bottom: 8px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, 100%);
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #111c30;
+  transition: .3s;
+}
+
+.search:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 4px #5ce1e61b, 0 0 20px #5ce1e61b;
+}
+
+.search input {
+  width: 100%;
+  color: white;
+  font: inherit;
+  outline: none;
+  border: 0;
+  background: transparent;
+}
+
+.folders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.folder {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: linear-gradient(145deg, #15233bee, #0d1626ee);
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  animation: appear .65s both;
+}
+
+.folder::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  transition: left .7s;
+}
+
+.folder:hover::before { left: 140%; }
+
+.folder:hover {
+  transform: translateY(-7px);
+  border-color: #5ce1e688;
+  box-shadow: 0 18px 40px #0005, 0 0 20px #5ce1e60b;
+}
+
+.folder-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 21px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.folder-head:focus-visible {
+  outline: 2px solid var(--cyan);
+}
+
+.folder-icon {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #9a8cff44;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #5ce1e625, #9a8cff25);
+  font-size: 25px;
+  transition: transform .35s;
+}
+
+.folder:hover .folder-icon {
+  transform: rotate(-8deg) scale(1.1);
+}
+
+.folder h3 {
+  margin: 3px 0 7px;
+  font: 600 15px/1.4 'Space Grotesk', sans-serif;
+}
+
+.folder-head p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.count {
+  white-space: nowrap;
+  padding: 5px 7px;
+  border: 1px solid #5ce1e644;
+  border-radius: 7px;
+  color: var(--cyan);
+  font-size: 10px;
+}
+
+.count::after { content: " +"; }
+.folder-head[aria-expanded="true"] .count::after { content: " −"; }
+
+.topic-list {
+  display: grid;
+  gap: 9px;
+  padding: 0 13px 14px;
+}
+
+.topic-list.collapsed { display: none; }
+
+.topic {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  text-align: left;
+  color: var(--text);
+  font-family: inherit;
+  background: #0b1423;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.topic:hover {
+  background: #192a42;
+  border-color: #5ce1e688;
+  transform: translateX(5px);
+}
+
+.topic-num {
+  padding: 7px 8px;
+  color: var(--cyan);
+  background: #5ce1e618;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.topic-copy { flex: 1; }
+.topic-copy strong { display: block; font-size: 12px; margin-bottom: 4px; }
+.topic-copy small { color: var(--muted); font-size: 11px; }
+.arrow { color: var(--cyan); transition: transform .25s; }
+.topic:hover .arrow { transform: translate(3px,-3px); }
+
+.empty {
+  display: none;
+  padding: 30px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 15px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 38px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: #02050be8;
+  backdrop-filter: blur(12px);
+}
+
+.modal-wrap.open {
+  display: flex;
+  animation: fade .2s;
+}
+
+.modal {
+  width: min(650px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid #6683b777;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #15243b, #0c1423);
+  box-shadow: 0 30px 100px #0009;
+  animation: pop .3s;
+}
+
+.modal-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-top h2 {
+  margin: 3px 0 7px;
+  font: 600 22px 'Space Grotesk', sans-serif;
+}
+
+.modal-top p { color: var(--muted); font-size: 12px; }
+
+.close {
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff08;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.close:hover { background: #ff647a22; }
+
+.modal-content {
+  padding: 23px;
+  color: #c5d3e8;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.modal-content h4 {
+  margin: 20px 0 5px;
+  color: var(--cyan);
+  font: 600 13px 'Space Grotesk', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal-content h4:first-child { margin-top: 0; }
+
+.keypoint {
+  margin-top: 17px;
+  padding: 14px;
+  border: 1px solid #5ce1e633;
+  border-radius: 12px;
+  background: #5ce1e60c;
+}
+
+.keypoint strong { color: var(--cyan); }
+
+@keyframes blink {
+  50% { opacity: .35; transform: scale(.7); }
+}
+
+@keyframes float {
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(15px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes logoGlow {
+  to { box-shadow: 0 0 35px #9a8cff88; }
+}
+
+@keyframes glowBorder {
+  50% { box-shadow: 0 0 17px #5ce1e61b; }
+}
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; padding-top: 20px; }
+  .hero-visual { min-height: 230px; grid-row: 1; }
+  .orb { width: 145px; height: 145px; }
+  .orb-icon { font-size: 50px; }
+  .section-heading { align-items: stretch; flex-direction: column; }
+  .search { width: 100%; }
+  .folders { grid-template-columns: 1fr; }
+  .toplabel { display: none; }
+  .footer { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<canvas id="particles"></canvas>
+<div class="glow" id="glow"></div>
+
+<header>
+  <div class="brand">
+    <div class="logo">⌘</div>
+    <div>CYBER<span>NOTES</span></div>
+  </div>
+  <div class="toplabel">My Cybersecurity Learning Notes</div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> MY LEARNING NOTES · 10 TOPICS</div>
+      <h1>What I Learned<br><span>About Cybersecurity</span></h1>
+      <p>
+        From these lessons, I learned how encryption protects messages,
+        how the CIA Triad helps keep information secure, how social engineering
+        tricks people, how AAA and layered defenses protect systems, and how
+        viruses and antivirus tools affect computer safety. Open each folder
+        to explore my understanding of the lessons.
+      </p>
+    </div>
+
+    <div class="hero-visual">
+      <div class="orb"><div class="orb-icon">🔐</div></div>
+      <div class="float-tag tag1">✦ My understanding</div>
+      <div class="float-tag tag2">◈ Cybersecurity</div>
+      <div class="float-tag tag3">▣ 5 folders · 10 topics</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <div>
+        <h2>What I Understood</h2>
+        <p>Open a folder, then select a topic to read my learning notes.</p>
+      </div>
+      <label class="search">
+        <span>⌕</span>
+        <input id="search" type="search" placeholder="Search topics...">
+      </label>
+    </div>
+
+    <div class="folders" id="folders"></div>
+    <div class="empty" id="empty">No matching topics. Try another keyword.</div>
+  </section>
+
+  <div class="footer">
+    <span>MY CYBERSECURITY LEARNING NOTES</span>
+    <span>Learning one topic at a time · Click a topic to begin</span>
+  </div>
+</main>
+
+<div class="modal-wrap" id="modalWrap" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <article class="modal">
+    <div class="modal-top">
+      <div class="folder-icon" id="modalIcon">🔐</div>
+      <div>
+        <h2 id="modalTitle">Topic title</h2>
+        <p id="modalFolder">Folder name</p>
+      </div>
+      <button class="close" id="close" aria-label="Close">×</button>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+  </article>
+</div>
+
+<script>
+const folders = [
+  {
+    title: "Understanding the Vigenère Cipher",
+    icon: "🔡",
+    desc: "Learning how a keyword encrypts a message.",
+    topics: [
+      {
+        title: "What Is the Vigenère Cipher?",
+        tag: "Cipher basics",
+        intro: "The Vigenère cipher is a traditional method of encrypting text using a keyword. The keyword determines how letters in the original message are shifted.",
+        sections: [
+          ["The basic idea", "The original readable message is called plaintext. The cipher combines it with a keyword to create ciphertext that is harder to understand without the key."],
+          ["How it differs", "A Caesar cipher uses one fixed letter shift. The Vigenère cipher uses different shifts based on the letters of the keyword."]
+        ],
+        tip: "The Vigenère cipher is useful for learning encryption, but it is not secure enough for modern sensitive information."
+      },
+      {
+        title: "Encryption and Decryption",
+        tag: "How it works",
+        intro: "Encryption changes readable information into a coded form. Decryption reverses that process to recover the original message.",
+        sections: [
+          ["Encryption", "The sender uses the cipher and keyword to transform plaintext into ciphertext."],
+          ["Decryption", "The receiver uses the correct keyword and the reverse process to recover the original plaintext."]
+        ],
+        tip: "The key must be protected. If someone discovers it, they may be able to read the encrypted message."
+      }
+    ]
+  },
+  {
+    title: "The CIA Triad in Cybersecurity",
+    icon: "🛡️",
+    desc: "Confidentiality, integrity, and availability.",
+    topics: [
+      {
+        title: "The Three Security Principles",
+        tag: "CIA fundamentals",
+        intro: "The CIA Triad describes three important goals of information security: confidentiality, integrity, and availability.",
+        sections: [
+          ["Confidentiality", "Information should only be accessible to people who have permission. Passwords, encryption, and access controls can help protect it."],
+          ["Integrity", "Information should remain accurate and complete. Security controls help prevent or detect unauthorized changes."],
+          ["Availability", "Information and systems should be accessible to authorized users when needed. Backups and recovery plans help support availability."]
+        ],
+        tip: "Confidentiality protects secrecy, integrity protects accuracy, and availability protects access."
+      },
+      {
+        title: "Protecting the CIA Triad",
+        tag: "Security controls",
+        intro: "Organizations use different security measures to support the three principles of the CIA Triad.",
+        sections: [
+          ["Protect confidentiality", "Use strong passwords, multi-factor authentication, encryption, and permissions."],
+          ["Protect integrity", "Use file checks, digital signatures, version history, and audit logs to help detect unwanted changes."],
+          ["Protect availability", "Maintain backups, update systems, and prepare recovery plans for outages or attacks."]
+        ],
+        tip: "Good security balances all three principles rather than focusing on only one."
+      }
+    ]
+  },
+  {
+    title: "Social Engineering Attacks",
+    icon: "🎭",
+    desc: "Understanding how attackers manipulate people.",
+    topics: [
+      {
+        title: "Common Social Engineering Techniques",
+        tag: "Recognize attacks",
+        intro: "Social engineering uses deception or psychological pressure to persuade people to reveal information or perform unsafe actions.",
+        sections: [
+          ["Phishing", "Fraudulent emails, texts, or websites try to make people click dangerous links or reveal private information."],
+          ["Vishing and pretexting", "Vishing uses phone calls to deceive victims. Pretexting involves making up a believable story or identity to gain trust."],
+          ["Tailgating", "An unauthorized person follows an authorized person into a restricted area."]
+        ],
+        tip: "Be cautious with unexpected messages, suspicious links, urgent demands, and requests for confidential information."
+      },
+      {
+        title: "Preventing Social Engineering",
+        tag: "Safe habits",
+        intro: "People can reduce social engineering risks by checking identities and following safe procedures.",
+        sections: [
+          ["Verify the sender", "Contact the person or organization through a known official channel instead of relying on a suspicious message."],
+          ["Pause before acting", "Be careful when a message pressures you to pay money, share a password, or open an unexpected attachment."],
+          ["Report suspicious activity", "Tell the appropriate teacher, administrator, or security team if you receive a suspicious message."]
+        ],
+        tip: "A message that looks official is not always genuine. Verify first, especially when sensitive information is involved."
+      }
+    ]
+  },
+  {
+    title: "AAA, Risk, and Defense in Depth",
+    icon: "🧩",
+    desc: "Managing access, risks, and layers of protection.",
+    topics: [
+      {
+        title: "The AAA Framework",
+        tag: "Access management",
+        intro: "AAA stands for Authentication, Authorization, and Accounting. These concepts help control and monitor access to systems.",
+        sections: [
+          ["Authentication", "Checks who a user is, for example through a password, biometric check, or security token."],
+          ["Authorization", "Determines what an authenticated user is allowed to access or do."],
+          ["Accounting", "Records user activities to support monitoring, auditing, and investigations."]
+        ],
+        tip: "Authentication asks who you are. Authorization asks what you can do. Accounting records what you did."
+      },
+      {
+        title: "Risk Management and Defense in Depth",
+        tag: "Layered protection",
+        intro: "Risk management identifies possible security problems. Defense in depth uses multiple layers of protection instead of relying on a single defense.",
+        sections: [
+          ["Identify risks", "Identify important information and systems, possible threats, weaknesses, and the possible impact of an incident."],
+          ["Apply protections", "Use suitable security controls, keep systems updated, and review risks regularly."],
+          ["Use multiple layers", "Combine access controls, network security, endpoint protection, backups, monitoring, and user awareness."]
+        ],
+        tip: "If one security measure fails, another layer may still help reduce the damage."
+      }
+    ]
+  },
+  {
+    title: "Virus and Antivirus",
+    icon: "🦠",
+    desc: "Learning about computer viruses and protection tools.",
+    topics: [
+      {
+        title: "Computer Viruses and Their Effects",
+        tag: "Malware basics",
+        intro: "A computer virus is malicious software that attaches itself to a file or program and can spread when the infected host is run or shared.",
+        sections: [
+          ["How viruses spread", "They may spread through infected attachments, downloaded files, removable drives, or compromised software."],
+          ["Possible effects", "An infected computer may behave unusually, have damaged files, become unstable, or experience unauthorized activity."],
+          ["Virus and malware", "A virus is one type of malware. Other types include worms, trojans, spyware, and ransomware."]
+        ],
+        tip: "Avoid running unexpected files or opening attachments from sources you do not trust."
+      },
+      {
+        title: "Antivirus and Safe Computing",
+        tag: "Prevention",
+        intro: "Antivirus software can help detect, block, quarantine, or remove certain malicious files and activities.",
+        sections: [
+          ["Keep software updated", "Install operating-system and security updates so known weaknesses can be fixed."],
+          ["Scan suspicious files", "Use your security software's scan and quarantine features when something seems unsafe."],
+          ["Back up important data", "Backups help you recover files if a device is damaged or compromised."],
+          ["Practice safe computing", "Download from trusted sources, check links carefully, use strong passwords, and enable multi-factor authentication when possible."]
+        ],
+        tip: "Antivirus helps, but it cannot guarantee complete protection. Updates, backups, and careful behavior are also important."
+      }
+    ]
+  }
+];
+
+const folderContainer = document.getElementById("folders");
+const searchInput = document.getElementById("search");
+const emptyMessage = document.getElementById("empty");
+
+function renderFolders() {
+  const query = searchInput.value.toLowerCase().trim();
+  folderContainer.innerHTML = "";
+  let visibleCount = 0;
+
+  folders.forEach((folder, fi) => {
+    const topics = folder.topics.filter(topic => {
+      const text = [
+        folder.title,
+        folder.desc,
+        topic.title,
+        topic.tag,
+        topic.intro,
+        ...topic.sections.flat(),
+        topic.tip
+      ].join(" ").toLowerCase();
+
+      return text.includes(query);
+    });
+
+    if (query && topics.length === 0) return;
+    visibleCount++;
+
+    const card = document.createElement("article");
+    card.className = "folder";
+    card.style.animationDelay = `${fi * .08}s`;
+
+    const expanded = query.length > 0;
+
+    card.innerHTML = `
+      <div class="folder-head" role="button" tabindex="0"
+           aria-expanded="${expanded}">
+        <div class="folder-icon">${folder.icon}</div>
+        <div style="flex:1">
+          <h3>${folder.title}</h3>
+          <p>${folder.desc}</p>
+        </div>
+        <span class="count">${topics.length} TOPICS</span>
+      </div>
+
+      <div class="topic-list ${expanded ? "" : "collapsed"}">
+        ${topics.map(topic => {
+          const ti = folder.topics.indexOf(topic);
+          return `
+            <button class="topic" data-folder="${fi}" data-topic="${ti}">
+              <span class="topic-num">0${ti + 1}</span>
+              <span class="topic-copy">
+                <strong>${topic.title}</strong>
+                <small>${topic.tag}</small>
+              </span>
+              <span class="arrow">↗</span>
+            </button>`;
+        }).join("")}
+      </div>`;
+
+    folderContainer.appendChild(card);
+  });
+
+  emptyMessage.style.display = visibleCount ? "none" : "block";
+
+  document.querySelectorAll(".folder-head").forEach(head => {
+    const toggle = () => {
+      const list = head.nextElementSibling;
+      const opening = list.classList.contains("collapsed");
+      list.classList.toggle("collapsed");
+      head.setAttribute("aria-expanded", String(opening));
+    };
+
+    head.addEventListener("click", toggle);
+
+    head.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  document.querySelectorAll(".topic").forEach(button => {
+    button.addEventListener("click", () => {
+      openTopic(+button.dataset.folder, +button.dataset.topic);
+    });
+  });
+}
+
+function openTopic(fi, ti) {
+  const folder = folders[fi];
+  const topic = folder.topics[ti];
+
+  document.getElementById("modalIcon").textContent = folder.icon;
+  document.getElementById("modalTitle").textContent = topic.title;
+  document.getElementById("modalFolder").textContent =
+    folder.title + " / " + topic.tag;
+
+  let html = `<p>${topic.intro}</p>`;
+
+  topic.sections.forEach(section => {
+    html += `<h4>${section[0]}</h4><p>${section[1]}</p>`;
+  });
+
+  html += `
+    <div class="keypoint">
+      <strong>✦ Remember</strong>
+      <p>${topic.tip}</p>
+    </div>`;
+
+  document.getElementById("modalContent").innerHTML = html;
+  document.getElementById("modalWrap").classList.add("open");
+  document.body.style.overflow = "hidden";
+  document.getElementById("close").focus();
+}
+
+function closeModal() {
+  document.getElementById("modalWrap").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+searchInput.addEventListener("input", renderFolders);
+document.getElementById("close").addEventListener("click", closeModal);
+
+document.getElementById("modalWrap").addEventListener("click", event => {
+  if (event.target.id === "modalWrap") closeModal();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeModal();
+});
+
+/* Animated background particles */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let particles = [];
+
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + "px";
+  canvas.style.height = window.innerHeight + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  particles = Array.from({
+    length: Math.min(65, Math.floor(window.innerWidth / 18))
+  }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.8 + .5,
+    dx: (Math.random() - .5) * .35,
+    dy: (Math.random() - .5) * .35
+  }));
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+  for (const p of particles) {
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x < 0 || p.x > window.innerWidth) p.dx *= -1;
+    if (p.y < 0 || p.y > window.innerHeight) p.dy *= -1;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = "#7ce9f088";
+    ctx.fill();
+
+    for (const other of particles) {
+      const dx = p.x - other.x;
+      const dy = p.y - other.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 95) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(other.x, other.y);
+        ctx.strokeStyle = `rgba(92,225,230,${.08 * (1 - distance / 95)})`;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(animateParticles);
+}
+
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  canvas.style.display = "none";
+} else {
+  resizeCanvas();
+  animateParticles();
+  window.addEventListener("resize", resizeCanvas);
+}
+
+/* Mouse-follow glow */
+const glow = document.getElementById("glow");
+
+window.addEventListener("mousemove", event => {
+  glow.style.left = event.clientX + "px";
+  glow.style.top = event.clientY + "px";
+});
+
+renderFolders();
+</script>
+</body>
+</html>
